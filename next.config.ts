@@ -1,7 +1,14 @@
-import type { NextConfig } from "next";
+// ai-chat-front/next.config.ts
+import { NextConfig } from "next/types";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  images: {
+    domains: ['localhost', 'api.together.ai', 'res.cloudinary.com', 'cloudinary.com', 'ai-chat-backend-3cba.onrender.com'],
+  },
+  reactStrictMode: true,
+  env: {
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
+  },
 };
 
 export default nextConfig;
