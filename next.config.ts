@@ -3,7 +3,7 @@ import { NextConfig } from "next/types";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ['localhost', 'api.together.ai', 'res.cloudinary.com', 'cloudinary.com', 'ai-chat-backend-3cba.onrender.com'],
+    domains: ['localhost', 'api.together.ai', 'res.cloudinary.com', 'cloudinary.com', 'ai-stepik-django.onrender.com'],
   },
   reactStrictMode: true,
   env: {
