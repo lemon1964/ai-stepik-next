@@ -13,11 +13,15 @@ import useBackendWakeUp from "@/hooks/useBackendWakeUp";
 import ChatSkeleton from "@ui/common/Preloader";
 import { ErrorBoundary } from "@ui/common/ErrorBoundary";
 import { signIn } from "next-auth/react";
+import { useModels } from "@/hooks/useModels";
+
 
 export default function ClientChatPage({ session }: { session: Session | null }) {
   const [selected, setSelected] = useState<null | { id: string; name: string }>(null);
   const isWakingUp = useBackendWakeUp();
   const currentLanguage = useSelector((state: RootState) => state.language.current);
+  const { isLoadingModels } = useModels(); // 💡 Модели подгружаются сразу
+
 
   useEffect(() => {
     localizationService.syncLanguageSettings();
@@ -49,6 +53,15 @@ export default function ClientChatPage({ session }: { session: Session | null })
       <div className="flex-1 flex items-center justify-center">
         <ChatSkeleton />
         <span className="ml-2 text-gray-600">Пробуждаем сервер, ждем…</span>
+      </div>
+    );
+  }
+
+  if (isLoadingModels) {
+    return (
+      <div className="flex-1 flex items-center justify-center">
+        <ChatSkeleton />
+        <span className="ml-2 text-gray-600">Загружаем модели..</span>
       </div>
     );
   }

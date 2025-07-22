@@ -5,10 +5,11 @@ import { FC, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useDispatch } from "react-redux";
 import { showNotification } from "@/reducers/notificationReducer";
-import { AppDispatch } from "@/store/store";
+import { AppDispatch, RootState } from "@/store/store";
 import { languageActions } from "@/reducers/languageReducer";
 import { localizationService } from "@/services/localizationService";
 import { MobileHeaderView } from "./Views/MobileHeaderView";
+import { useSelector } from "react-redux";
 
 export interface MobileHeaderProps {
   onMenuToggle(): void;
@@ -23,6 +24,7 @@ export const MobileHeader: FC<MobileHeaderProps> = ({
 }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { data: session } = useSession();
+  const availableModels = useSelector((state: RootState) => state.availableModels);
 
   useEffect(() => {
     if (session) return;
@@ -42,6 +44,7 @@ export const MobileHeader: FC<MobileHeaderProps> = ({
       modelType={modelType}
       selectedModel={selectedModel}
       onLanguageChange={handleLanguageChange}
+      availableModels={availableModels}
     />
   );
 };

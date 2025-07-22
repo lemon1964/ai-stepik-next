@@ -1,6 +1,6 @@
 // ai-chat-next/src/components/features/chat/ChatWindowViews/ChatHeader.tsx
 import ModalAudio from "@ui/common/ModalAudio";
-import SoundVolume from "@features/common/SoundVolume";
+import SoundVolume from "../../common/SoundVolume";
 import { localizationService } from "@/services/localizationService";
 
 interface ChatHeaderProps {
@@ -16,7 +16,10 @@ export const ChatHeader = ({
 }: ChatHeaderProps) => (
   <>
     <div className="p-4 border-b flex items-center justify-between">
-      <h2 className="text-2xl font-bold truncate max-w-[70%]">{categoryName}</h2>
+      <h2 className="text-2xl font-bold break-words max-w-[70%] whitespace-normal line-clamp-2">
+        {categoryName}
+      </h2>
+      {/* <h2 className="text-2xl font-bold truncate max-w-[70%]">{categoryName}</h2> */}
       <button
         className="px-3 py-1 bg-gray-500 text-white rounded hover:bg-blue-600 whitespace-nowrap"
         onClick={() => setAudioModalOpen(true)}

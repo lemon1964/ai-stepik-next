@@ -43,7 +43,7 @@ export const ChatInputForm = ({
         className="flex-1 border bg-white rounded-l px-3 py-2 text-gray-700 focus:outline-none"
         disabled={isSending}
       />
-       
+      
       <button
         type="button"
         onClick={startListening}

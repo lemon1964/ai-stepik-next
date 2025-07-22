@@ -14,6 +14,7 @@ interface Question {
   created_at: string;
   answers: Answer[];
   model: string;
+  actual_model: string;
   language: string;
 }
 interface Category {
@@ -33,6 +34,7 @@ interface ChatWindowProps {
   categoryId: string;
   categoryName: string;
 }
+
 
 interface ISpeechRecognition extends EventTarget {
   lang: string;
@@ -58,6 +60,12 @@ interface ModelOption {
   name: string;
 }
 
+interface ModelOptions {
+  text: ModelOption[];
+  code: ModelOption[];
+  image: ModelOption[];
+}
+
 interface ModelState {
   modelType: ModelType;
   selectedModel: string;
@@ -70,7 +78,7 @@ interface ModelMapping {
 }
 
 interface RateState {
-  start: string;
+  start: string; // ISO-строка времени начала периода
   counts: {
     text: number;
     code: number;

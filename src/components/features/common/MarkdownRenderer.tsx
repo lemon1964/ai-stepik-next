@@ -37,7 +37,8 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) =
           if (inline) {
             return (
               <code
-                className={`${className} bg-gray-700 px-1 py-0.5 rounded text-xs sm:text-sm`}
+              className={`${className} bg-gray-700 px-1 py-0.5 rounded text-xs sm:text-sm break-anywhere`}
+                // className={`${className} bg-gray-700 px-1 py-0.5 rounded text-xs sm:text-sm`}
                 {...rest}
               >
                 {children}
@@ -76,7 +77,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) =
 
           return (
             <pre
-              className="bg-gray-800 p-2 rounded-md text-gray-100 text-xs sm:text-sm md:text-base whitespace-pre-wrap break-words"
+              className="bg-gray-800 p-2 rounded-md text-gray-100 text-xs sm:text-sm md:text-base whitespace-pre-wrap break-anywhere"
               {...rest}
             >
               {children}

@@ -7,12 +7,12 @@ import { showNotification } from "@/reducers/notificationReducer";
 import { AppDispatch } from "@/store/store";
 import { localizationService } from "@/services/localizationService";
 
+const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 type BaseFormProps = {
   type: "login" | "register";
   onClose: () => void;
 };
-
-const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const BaseForm: React.FC<BaseFormProps> = ({ type, onClose }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -53,10 +53,10 @@ const BaseForm: React.FC<BaseFormProps> = ({ type, onClose }) => {
         });
         dispatch(showNotification(localizationService.get("registrationSuccess"), "success", 5));
       } else {
-        const result = await signIn("credentials", { 
-          email, 
-          password, 
-          redirect: false 
+        const result = await signIn("credentials", {
+          email,
+          password,
+          redirect: false,
         });
         if (result?.error) {
           setError(localizationService.get("invalidCredentials"));
@@ -74,24 +74,24 @@ const BaseForm: React.FC<BaseFormProps> = ({ type, onClose }) => {
   };
 
   return (
-    <div className="flex flex-col gap-4 w-full max-w-md">
-      <h2 className="text-xl font-bold text-center text-gray-800">
-        {resetMode 
+    <div className="flex flex-col gap-4">
+      <h2 className="text-xl font-bold">
+        {resetMode
           ? localizationService.get("resetPassword")
-          : type === "register" 
-            ? localizationService.get("registration")
-            : localizationService.get("login")}
+          : type === "register"
+          ? localizationService.get("registration")
+          : localizationService.get("login")}
       </h2>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700">Email</label>
+          <label className="block text-sm font-medium">Email</label>
           <input
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={e => setEmail(e.target.value)}
             required
-            className="w-full border border-gray-300 rounded px-3 py-2 mt-1 text-gray-800"
+            className="w-full border border-gray-300 rounded px-3 py-2 mt-1 text-gray-500"
             placeholder="your@email.com"
           />
         </div>
@@ -99,15 +99,15 @@ const BaseForm: React.FC<BaseFormProps> = ({ type, onClose }) => {
         {!resetMode && (
           <>
             <div>
-              <label className="block text-sm font-medium text-gray-700">
+              <label className="block text-sm font-medium">
                 {localizationService.get("password")}
               </label>
               <input
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={e => setPassword(e.target.value)}
                 required
-                className="w-full border border-gray-300 rounded px-3 py-2 mt-1 text-gray-800"
+                className="w-full border border-gray-300 rounded px-3 py-2 mt-1 text-gray-500"
                 placeholder="••••••••"
               />
             </div>
@@ -115,28 +115,28 @@ const BaseForm: React.FC<BaseFormProps> = ({ type, onClose }) => {
             {type === "register" && (
               <>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium">
                     {localizationService.get("confirmPassword")}
                   </label>
                   <input
                     type="password"
                     value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    onChange={e => setConfirmPassword(e.target.value)}
                     required
-                    className="w-full border border-gray-300 rounded px-3 py-2 mt-1 text-gray-800"
+                    className="w-full border border-gray-300 rounded px-3 py-2 mt-1 text-gray-500"
                     placeholder="••••••••"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm font-medium">
                     {localizationService.get("name")}
                   </label>
                   <input
                     type="text"
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={e => setName(e.target.value)}
                     required
-                    className="w-full border border-gray-300 rounded px-3 py-2 mt-1 text-gray-800"
+                    className="w-full border border-gray-300 rounded px-3 py-2 mt-1 text-gray-500"
                     placeholder={localizationService.get("yourName")}
                   />
                 </div>
@@ -149,37 +149,31 @@ const BaseForm: React.FC<BaseFormProps> = ({ type, onClose }) => {
 
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
-          {resetMode 
+          {resetMode
             ? localizationService.get("sendResetLink")
-            : type === "register" 
-              ? localizationService.get("register")
-              : localizationService.get("signIn")}
+            : type === "register"
+            ? localizationService.get("register")
+            : localizationService.get("signIn")}
         </button>
       </form>
 
       <div className="flex flex-col gap-2">
         {!resetMode && (
-          <button
-            onClick={() => setResetMode(true)}
-            className="text-blue-600 hover:underline text-sm"
-          >
+          <button onClick={() => setResetMode(true)} className="text-blue-500 hover:underline">
             {localizationService.get("forgotPassword")}
           </button>
         )}
 
         <button
           onClick={handleGoogleLogin}
-          className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 flex items-center justify-center gap-2 transition"
+        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
         >
           {localizationService.get("signInWithGoogle")}
         </button>
 
-        <button
-          onClick={onClose}
-          className="text-gray-600 hover:underline text-sm"
-        >
+        <button onClick={onClose} className="text-gray-500 hover:underline">
           {localizationService.get("close")}
         </button>
       </div>

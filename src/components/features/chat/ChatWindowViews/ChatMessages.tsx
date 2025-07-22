@@ -17,7 +17,6 @@ interface ChatMessagesProps {
   bottomRef: React.RefObject<HTMLDivElement | null>;
   scrollToTop: () => void;
   scrollToBottom: () => void;
-  handleScroll: (e: React.UIEvent<HTMLDivElement>) => void;
 }
 
 export const ChatMessages = ({
@@ -28,7 +27,6 @@ export const ChatMessages = ({
   bottomRef,
   scrollToTop,
   scrollToBottom,
-  handleScroll
 }: ChatMessagesProps) => (
   <div className="relative flex-1 overflow-hidden">
     <button
@@ -39,15 +37,12 @@ export const ChatMessages = ({
       ▼
     </button>
 
-    <div 
-      className="flex flex-col h-full overflow-y-auto p-2 md:p-4 space-y-4"
-      onScroll={handleScroll}
-    >
+    <div className="flex flex-col h-full overflow-y-auto p-2 md:p-4 space-y-4">
       <div ref={topRef} />
-      {messages.map((msg) => (
+      {messages.map(msg => (
         <div key={msg.id} className="space-y-1">
           <div className="ml-2 md:ml-4 text-gray-400 break-words">{msg.prompt}</div>
-          {msg.answers.map((ans) =>
+          {msg.answers.map(ans =>
             /\.(png|jpe?g|gif)$/i.test(ans.content) ? (
               <ImageOutput key={ans.id} url={ans.content} />
             ) : (

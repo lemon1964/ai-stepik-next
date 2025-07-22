@@ -1,5 +1,4 @@
-// ai-chat-front/src/components/features/chat/ChatWindowContainer.tsx
-
+// ai-chat-next/src/components/features/chat/ChatWindowContainer.tsx
 import { FC, useState, useRef, useMemo, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useSession } from "next-auth/react";
@@ -12,76 +11,81 @@ import { useRateLimit } from "@/hooks/useRateLimit";
 import { demoCategoryIds, demoMessages } from "@/data/demoChat";
 import { localizationService } from "@/services/localizationService";
 import { ChatWindowView } from "./ChatWindowViews/ChatWindowView";
-
+import { useModels } from "@/hooks/useModels";
 
 export const ChatWindowContainer: FC<ChatWindowProps> = ({ categoryId, categoryName }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const { modelType, selectedModel } = useSelector((state: RootState) => state.model);
   const session = useSession();
-
   const isDemoCategory = demoCategoryIds.includes(categoryId);
   const isDemo = isDemoCategory;
-
   const {
     data: messages,
     isLoading,
     isFetching,
     refetch,
     error,
-  } = useGetQuestionsQuery(categoryId, { skip: isDemoCategory });
-
+  } = useGetQuestionsQuery(categoryId, {
+    skip: isDemoCategory,
+    refetchOnMountOrArgChange: true,
+  });
+  const { modelType, selectedModel } = useSelector((state: RootState) => state.model);
+  const { refetchModels, isLoadingModels } = useModels();
   const [audioModalOpen, setAudioModalOpen] = useState(false);
   const [createQuestion, { isLoading: isSending }] = useCreateQuestionMutation();
   const [input, setInput] = useState("");
   const sendButtonRef = useRef<HTMLButtonElement>(null);
-
   const { speakingId, speakText } = useTextToSpeech();
   const startListening = useSpeechRecognition(transcript => {
     setInput(transcript);
     sendButtonRef.current?.focus();
   });
-
-  const PAGE_SIZE = 20;
-  const [limit, setLimit] = useState(PAGE_SIZE);
   const { isAllowed, mark } = useRateLimit();
-
-  useEffect(() => {
-    setLimit(PAGE_SIZE);
-  }, [categoryId]);
+  const topRef = useRef<HTMLDivElement | null>(null);
+  const bottomRef = useRef<HTMLDivElement | null>(null);
+  const [shouldScrollToBottom, setShouldScrollToBottom] = useState(true);
 
   const messagesToShow = useMemo<Message[]>(() => {
     if (isDemo) {
       return demoMessages[categoryId] || [];
     }
-    return messages ? messages.slice(-limit).reverse() : [];
-  }, [isDemo, categoryId, messages, limit]);
+    return messages ? [...messages].reverse() : [];
+  }, [isDemo, categoryId, messages]);
 
-  const topRef = useRef<HTMLDivElement | null>(null);
-  const bottomRef = useRef<HTMLDivElement | null>(null);
-
+  // Эффект для прокрутки
   useEffect(() => {
-    if (messagesToShow.length > 0) {
-      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messagesToShow]);
+    if (messagesToShow.length > 0 && shouldScrollToBottom) {
+      const timer = setTimeout(() => {
+        bottomRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "end",
+          inline: "nearest",
+        });
+      }, 50);
 
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const container = e.currentTarget;
-    if (container.scrollTop < 50 && messages && limit < messages.length) {
-      setLimit(prev => Math.min(prev + PAGE_SIZE, messages.length));
+      return () => clearTimeout(timer);
     }
-  };
+  }, [messagesToShow, shouldScrollToBottom]);
+
+  // При смене категории
+  useEffect(() => {
+    setShouldScrollToBottom(false);
+    const timer = setTimeout(() => setShouldScrollToBottom(true), 1000);
+    return () => clearTimeout(timer);
+  }, [categoryId]);
 
   const scrollToTop = () => topRef.current?.scrollIntoView({ behavior: "smooth" });
   const scrollToBottom = () => bottomRef.current?.scrollIntoView({ behavior: "smooth" });
 
   const send = async (e: React.FormEvent) => {
     e.preventDefault();
+    setShouldScrollToBottom(true); // Гарантируем скролл после отправки
     if (!input.trim()) return;
-
+    if (isLoadingModels) {
+      dispatch(showNotification("Models are updating, please wait", "info", 5));
+      return;
+    }
     const type = modelType as "text" | "code" | "image";
     const isPromo = JSON.parse(localStorage.getItem("isPromoUser") || "false");
-
     if (!isPromo) {
       const { ok, retryAfter } = isAllowed(type);
       if (!ok) {
@@ -93,9 +97,8 @@ export const ChatWindowContainer: FC<ChatWindowProps> = ({ categoryId, categoryN
         return;
       }
     }
-
     try {
-      await createQuestion({
+      const response = await createQuestion({
         categoryId,
         prompt: input.trim(),
         model: selectedModel,
@@ -103,10 +106,36 @@ export const ChatWindowContainer: FC<ChatWindowProps> = ({ categoryId, categoryN
         category_id: categoryId,
         language: localizationService.getCurrentLanguage(),
       }).unwrap();
-      dispatch(showNotification(localizationService.get("QuestionSent"), "success", 2));
+      // Прокрутка вниз
+      setTimeout(() => {
+        bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+      await refetch();
+      // Проверяем подмену модели только если ответ содержит эту информацию
+      if (response.actual_model && response.actual_model !== selectedModel) {
+        // Обновляем список моделей
+        await refetchModels();
+        // Форматируем название моделей для уведомления
+        const otherModel = response.actual_model.split("/")[0].split("-")[0];
+        const unavailableModel = selectedModel.split("/")[0].split("-")[0];
+        dispatch(
+          showNotification(
+            `
+          ${localizationService.get("Model")} 
+          ${unavailableModel} 
+          ${localizationService.get("isNoLongervAvailable")}
+          ${otherModel} 
+          ${localizationService.get("respondedInstead")}
+          `,
+            "info",
+            5
+          )
+        );
+      } else {
+        dispatch(showNotification(localizationService.get("QuestionSent"), "success", 2));
+      }
       mark(type);
       setInput("");
-      refetch();
     } catch {
       dispatch(showNotification(localizationService.get("ErrorSendingQuestion"), "error", 3));
     }
@@ -139,7 +168,6 @@ export const ChatWindowContainer: FC<ChatWindowProps> = ({ categoryId, categoryN
       sendButtonRef={sendButtonRef}
       audioModalOpen={audioModalOpen}
       setAudioModalOpen={setAudioModalOpen}
-      handleScroll={handleScroll}
       scrollToTop={scrollToTop}
       scrollToBottom={scrollToBottom}
       topRef={topRef}

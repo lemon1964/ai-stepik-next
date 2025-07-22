@@ -3,7 +3,28 @@ import { NextConfig } from "next/types";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ['localhost', 'api.together.ai', 'res.cloudinary.com', 'cloudinary.com', 'ai-stepik-django.onrender.com'],
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
+      {
+        protocol: 'https',
+        hostname: 'api.together.ai',
+      },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cloudinary.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'ai-chat-backend-3cba.onrender.com',
+      }
+    ],
   },
   reactStrictMode: true,
   env: {

@@ -14,18 +14,21 @@ export function useTextToSpeech() {
 
       const voices = synth.getVoices();
       if (!voices.length) {
+        // если голоса ещё не загружены
         synth.onvoiceschanged = () => speakText(id, content);
         return;
       }
 
+      // если уже читаем этот же id — останавливаем
       if (speakingId === id) {
         synth.cancel();
         setSpeakingId(null);
         return;
       }
-
+      // останавливаем предыдущее
       synth.cancel();
 
+      // настраиваем язык и громкость
       const langCode = localizationService.getCurrentLanguage() === "ru" ? "ru-RU" : "en-US";
       audioService.setSpeechLanguage(langCode);
       audioService.setSpeechVolume(volume);

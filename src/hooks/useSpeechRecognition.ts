@@ -5,11 +5,16 @@ import { showNotification } from "@/reducers/notificationReducer";
 import { AppDispatch } from "@/store/store";
 import { localizationService } from "@/services/localizationService";
 
+/**
+ * Хук для работы с Web Speech API (SpeechRecognition).
+ * Возвращает функцию startListening, которую можно вызывать при клике на кнопку «🎤».
+ */
 export function useSpeechRecognition(onTranscript: (text: string) => void) {
   const dispatch = useDispatch<AppDispatch>();
   const recognitionRef = useRef<ISpeechRecognition | null>(null);
 
   const startListening = useCallback(() => {
+    // Если уже есть экземпляр — не создаём новый
     if (recognitionRef.current) return;
 
     const SpeechRecognitionConstructor =
@@ -17,7 +22,11 @@ export function useSpeechRecognition(onTranscript: (text: string) => void) {
 
     if (!SpeechRecognitionConstructor) {
       dispatch(
-        showNotification(localizationService.get("BrowserNoSpeechSupport"), "error", 3)
+        showNotification(
+          localizationService.get("BrowserNoSpeechSupport"),
+          "error",
+          3
+        )
       );
       return;
     }

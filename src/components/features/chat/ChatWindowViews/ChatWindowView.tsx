@@ -23,7 +23,6 @@ interface ChatWindowViewProps {
   sendButtonRef: React.RefObject<HTMLButtonElement | null>;
   audioModalOpen: boolean;
   setAudioModalOpen: (value: boolean) => void;
-  handleScroll: (e: React.UIEvent<HTMLDivElement>) => void;
   scrollToTop: () => void;
   scrollToBottom: () => void;
   topRef: React.RefObject<HTMLDivElement | null>;
@@ -44,7 +43,7 @@ export const ChatWindowView = (props: ChatWindowViewProps) => {
   }
 
   return (
-    <div className="flex flex-col flex-1 min-h-0">
+      <div className="flex flex-col flex-1 min-h-0">
       <ChatHeader
         categoryName={props.categoryName}
         audioModalOpen={props.audioModalOpen}
@@ -67,7 +66,6 @@ export const ChatWindowView = (props: ChatWindowViewProps) => {
             bottomRef={props.bottomRef}
             scrollToTop={props.scrollToTop}
             scrollToBottom={props.scrollToBottom}
-            handleScroll={props.handleScroll}
           />
         </motion.div>
       </AnimatePresence>

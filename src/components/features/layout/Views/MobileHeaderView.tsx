@@ -1,8 +1,7 @@
 // ai-chat-next//src/components/features/layout/views/MobileHeaderView.tsx
 "use client";
 
-import { FC } from "react";
-import { MODEL_OPTIONS } from "@/data/ModelOptions";
+import { FC, useState } from "react";
 import { useDispatch } from "react-redux";
 import { modelActions } from "@/reducers/modelReducer";
 import { signOut, useSession } from "next-auth/react";
@@ -13,6 +12,7 @@ interface MobileHeaderViewProps {
   modelType: ModelType;
   selectedModel: string;
   onLanguageChange(lang: "ru" | "en"): void;
+  availableModels: ModelOptions;
 }
 
 export const MobileHeaderView: FC<MobileHeaderViewProps> = ({
@@ -20,9 +20,16 @@ export const MobileHeaderView: FC<MobileHeaderViewProps> = ({
   modelType,
   selectedModel,
   onLanguageChange,
+  availableModels
 }) => {
   const dispatch = useDispatch();
   const { data: session } = useSession();
+  const [, setIsRefreshing] = useState(false);
+
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    window.location.reload();
+  };
 
   return (
     <header className="md:hidden flex items-center justify-between bg-gray-800 px-3 py-2 shadow">
@@ -68,7 +75,7 @@ export const MobileHeaderView: FC<MobileHeaderViewProps> = ({
             }}
             className="bg-gray-700 text-white text-xs rounded px-1 py-0.5"
           >
-            {MODEL_OPTIONS[modelType].map(m => (
+            {availableModels[modelType].map(m => (
               <option key={m.id} value={m.id}>
                 {m.name}
               </option>
@@ -77,19 +84,31 @@ export const MobileHeaderView: FC<MobileHeaderViewProps> = ({
         </div>
       </div>
 
-      {session && (
-        <button
-        onClick={() => {
-          localStorage.removeItem("auto-guest-login");
-          sessionStorage.setItem("justSignedOutAt", Date.now().toString());
-          signOut();
-        }}
-          className="ml-8 p-2 text-white hover:bg-gray-700 rounded"
-          aria-label="Sign out"
-        >
-          ⏏
-        </button>
-      )}
+      <div className="w-8 flex justify-end">
+        {status === "loading" ? (
+          <span className="p-2 opacity-50">⟳</span>
+        ) : session ? (
+          <button
+            onClick={() => {
+              localStorage.removeItem("auto-guest-login");
+              sessionStorage.setItem("justSignedOutAt", Date.now().toString());
+              signOut();
+            }}
+            className="p-2 text-white hover:bg-gray-700 rounded"
+            aria-label="Sign out"
+          >
+            ⏏
+          </button>
+        ) : (
+          <button
+            onClick={handleRefresh}
+            className={"p-2 text-white hover:bg-gray-700 rounded"}
+            aria-label="Refresh"
+          >
+            ⟳
+          </button>
+        )}
+      </div>
     </header>
   );
 };

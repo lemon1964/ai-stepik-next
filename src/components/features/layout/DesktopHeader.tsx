@@ -3,13 +3,15 @@
 
 import { FC, useRef } from "react";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/store/store";
+import { AppDispatch, RootState } from "@/store/store";
 import { signOut } from "next-auth/react";
 import { useUserSession } from "@/hooks/useUserSession";
 import { languageActions } from "@/reducers/languageReducer";
 import { modelActions } from "@/reducers/modelReducer";
 import { localizationService } from "@/services/localizationService";
 import { DesktopHeaderView } from "./Views/DesktopHeaderView";
+import { useSelector } from "react-redux";
+
 
 export interface DesktopHeaderProps {
   modelType: ModelType;
@@ -21,6 +23,8 @@ export const DesktopHeader: FC<DesktopHeaderProps> = ({ modelType, selectedModel
   const { session, userName, status, isLoading } = useUserSession();
   const loginRef = useRef<{ toggleVisibility(): void }>(null);
   const registerRef = useRef<{ toggleVisibility(): void }>(null);
+  const availableModels = useSelector((state: RootState) => state.availableModels);
+
 
   const handleLanguageChange = (lang: "ru" | "en") => {
     dispatch(languageActions.setLanguage(lang));
@@ -61,6 +65,7 @@ export const DesktopHeader: FC<DesktopHeaderProps> = ({ modelType, selectedModel
       onLogout={handleLogout}
       loginRef={loginRef}
       registerRef={registerRef}
+      availableModels={availableModels}
     />
   );
 };

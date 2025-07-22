@@ -3,7 +3,7 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import apiClient from "./authClientService";
 import axios, { AxiosError } from "axios";
 
-// 🧩 Обёртка, превращающая axios-запросы в формат, понятный RTK Query
+// Обёртка, превращающая axios в базовый запрос для RTK Query
 const axiosBaseQuery =
   (): import("@reduxjs/toolkit/query").BaseQueryFn<
     { url: string; method: string; data?: unknown },
@@ -29,11 +29,10 @@ const axiosBaseQuery =
     }
   };
 
-// 📦 Основной API-сервис для работы с категориями, вопросами и ответами
 export const chatApi = createApi({
   reducerPath: "chatApi",
   baseQuery: axiosBaseQuery(),
-  tagTypes: ["Categories", "Questions"],
+  tagTypes: ["Categories", "Questions", "Models"],
   endpoints: build => ({
     // 📚 Получить список категорий
     getCategories: build.query<Category[], void>({
@@ -53,9 +52,12 @@ export const chatApi = createApi({
       invalidatesTags: [{ type: "Categories", id: "LIST" }],
     }),
 
-    // ❓ Получить список вопросов по категории
+    // ❓ Получить вопросы по категории
     getQuestions: build.query<Question[], string>({
-      query: categoryId => ({ url: `api/chat/categories/${categoryId}/questions/`, method: "GET" }),
+      query: categoryId => ({
+        url: `api/chat/categories/${categoryId}/questions/`,
+        method: "GET",
+      }),
       providesTags: (result, error, categoryId) =>
         result
           ? [
@@ -65,7 +67,19 @@ export const chatApi = createApi({
           : [{ type: "Questions", id: `CATEGORY_${categoryId}` }],
     }),
 
-    // ➕ Создать вопрос (отправить промпт)
+    // 🧠 Получить список моделей с бэкенда
+    getModels: build.query<
+      {
+        text_models: Array<{ brand: string; model_id: string }>;
+        code_models: Array<{ brand: string; model_id: string }>;
+      },
+      void
+    >({
+      query: () => ({ url: "api/chat/models/", method: "GET" }),
+      providesTags: [{ type: "Models", id: "LIST" }],
+    }),
+
+    // 📤 Отправить вопрос (промпт)
     createQuestion: build.mutation<
       Question,
       {
@@ -87,18 +101,19 @@ export const chatApi = createApi({
       ],
     }),
 
-    // 💬 Получить ответы на вопрос
+    // 📥 Получить ответы по question_id
     getAnswers: build.query<Answer[], string>({
       query: questionId => ({ url: `api/chat/questions/${questionId}/answers/`, method: "GET" }),
     }),
   }),
 });
 
-// 🪝 Экспортируем хуки для использования в компонентах
+// 🪝 Хуки для использования в компонентах
 export const {
   useGetCategoriesQuery,
   useCreateCategoryMutation,
   useGetQuestionsQuery,
   useCreateQuestionMutation,
   useGetAnswersQuery,
+  useGetModelsQuery,
 } = chatApi;
