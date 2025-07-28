@@ -73,6 +73,7 @@ export default function ClientChatPage({ session }: { session: Session | null })
             <ChatWindowContainer categoryId={selected.id} categoryName={selected.name} />
           </ErrorBoundary>
         ) : (
+          
           <div className="flex-1 flex items-center justify-center px-4">
             <div className="max-w-md text-center bg-green-500/10 border border-green-600 rounded-2xl p-6 shadow-xl animate-fade-in">
               <p className="text-green-600 font-semibold text-xl mb-3">Привет, странник 🌿</p>
