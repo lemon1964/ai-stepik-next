@@ -188,7 +188,7 @@ export default function UserProfileClient() {
             </p>
 
             <Link
-              href="https://stepik.org/edit-lesson/1884064/step/1"
+              href="https://stepik.org/lesson/1884064/step/1"
               className="inline-block mt-4 px-6 py-3 bg-amber-500 text-black font-bold rounded-xl hover:bg-amber-400 transition shadow-xl"
               target="_blank"
             >
