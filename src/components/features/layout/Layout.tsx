@@ -19,7 +19,7 @@ export const Layout: FC<LayoutProps> = ({ children, onCategorySelect }) => {
   const selectedModel = useSelector((state: RootState) => state.model.selectedModel);
 
   useEffect(() => {
-    audioService.playMusic("/music/vikont.mp3");
+    audioService.playMusic("/music/cinderella.mp3");
     return () => audioService.stopMusic();
   }, []);
 
