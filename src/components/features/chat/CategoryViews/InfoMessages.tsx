@@ -3,7 +3,7 @@ import { infoMessages } from "@/data/infoMessages";
 import { localizationService } from "@/services/localizationService";
 
 interface InfoMessagesProps {
-  type: "auth" | "demo";
+  type: "auth" | "demo" | "neira";
 }
 
 export default function InfoMessages({ type }: InfoMessagesProps) {

@@ -37,7 +37,7 @@ export const ChatMessages = ({
       ▼
     </button>
 
-    <div className="flex flex-col h-full overflow-y-auto p-2 md:p-4 space-y-4">
+    <div className="flex flex-col h-full overflow-y-auto p-2 md:p-4 space-y-4 bg-black">
       <div ref={topRef} />
       {messages.map(msg => (
         <div key={msg.id} className="space-y-1">

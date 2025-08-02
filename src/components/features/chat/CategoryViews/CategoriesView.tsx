@@ -101,7 +101,8 @@ export default function CategoriesView({
                       animate={{ opacity: 1, height: "auto" }}
                       exit={{ opacity: 0, height: 0 }}
                     >
-                      <InfoMessages type="auth" />
+                      <InfoMessages type="neira" />
+                      {/* <InfoMessages type="auth" /> */}
                     </motion.div>
                   )}
                 </AnimatePresence>

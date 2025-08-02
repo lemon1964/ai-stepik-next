@@ -15,8 +15,8 @@ export const ChatHeader = ({
   setAudioModalOpen,
 }: ChatHeaderProps) => (
   <>
-    <div className="p-4 border-b flex items-center justify-between">
-      <h2 className="text-2xl font-bold break-words max-w-[70%] whitespace-normal line-clamp-2">
+    <div className="p-4 border-b flex items-center justify-between bg-black">
+      <h2 className="text-2xl font-bold break-words max-w-[70%] whitespace-normal line-clamp-2 text-white">
         {categoryName}
       </h2>
       {/* <h2 className="text-2xl font-bold truncate max-w-[70%]">{categoryName}</h2> */}
