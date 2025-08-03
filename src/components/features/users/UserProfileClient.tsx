@@ -14,6 +14,7 @@ import apiClient from "@services/authClientService";
 import Notification from "@features/common/Notification";
 import { localizationService } from "@services/localizationService";
 import { showNotification } from "@reducers/notificationReducer";
+import { useAppMode } from "@/hooks/useAppMode";
 
 const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -23,13 +24,12 @@ export default function UserProfileClient() {
   const [editingName, setEditingName] = useState(false);
   const [name, setName] = useState("");
   const [saving, setSaving] = useState(false);
+  const mode = useAppMode();
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    audioService.playMusic("/music/vikont.mp3");
-    return () => {
-      audioService.stopMusic();
-    };
+    audioService.playMusic("/music/cinderella.mp3");
+    return () => audioService.stopMusic();
   }, []);
 
   useEffect(() => {
@@ -79,133 +79,243 @@ export default function UserProfileClient() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden bg-black">
       <div id="stars" className="absolute inset-0"></div>
       <div id="stars2" className="absolute inset-0"></div>
       <div id="stars3" className="absolute inset-0"></div>
-      <div />
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url("/images/main.png")`, opacity: 0.05 }}
-        />
+      {mode === "neira" ? (
+        // NEIRA MODE
+        <>
+          {/* Кнопка ← по центру вверху */}
+          <div className="absolute top-4 left-0 right-0 flex justify-center z-20">
+            <Link
+              href="/"
+              className="px-4 py-2 bg-gray-900 bg-opacity-80 text-white rounded-lg hover:bg-gray-700 transition"
+            >
+              ←
+            </Link>
+          </div>
 
-      <div className="relative z-10 px-4 py-6 text-gray-200">
-        <Notification />
-
-        <div className="mt-8">
-          <Link
-            href="/"
-            className="inline-block px-4 py-2 bg-green-500 bg-opacity-80 text-white rounded-lg hover:bg-green-700 transition"
-          >
-            {localizationService.get("ToHome")}
-          </Link>
-        </div>
-
-        {/* <h1 className="mt-6 text-4xl font-extrabold text-white drop-shadow-lg">
-          {localizationService.get("YourProfile")}
-        </h1> */}
-
-        <div className="mt-4 bg-gray-900 bg-opacity-50 p-6 rounded-2xl shadow-xl max-w-md">
-          <p>
-            📧 <strong className="text-gray-100">Email:</strong> {userData.email}
-          </p>
-
-          <p className="mt-4">
-            🧑 <strong className="text-gray-100">{localizationService.get("Name")}</strong>{" "}
-            {editingName ? (
-              <input
-                value={name}
-                onChange={e => setName(e.target.value)}
-                onBlur={updateName}
-                onKeyDown={e => {
-                  if (e.key === "Enter") updateName();
-                  if (e.key === "Escape") {
-                    setName(userData.name);
-                    setEditingName(false);
-                  }
-                }}
-                disabled={saving}
-                className="px-2 py-1 border border-gray-700 rounded-lg bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                autoFocus
-              />
-            ) : (
-              <span
-                onClick={() => setEditingName(true)}
-                className="underline cursor-pointer hover:text-indigo-300 transition"
-                title={localizationService.get("ChangeName")}
-              >
-                {userData.name || localizationService.get("NotSpecified")}
-              </span>
-            )}
-          </p>
-          <p className="mt-4">
-            🎯{" "}
-            <strong className="text-gray-100">{localizationService.get("AskedQuestions")}</strong>{" "}
-            {userData.quantity}
-          </p>
-        </div>
-        
-        <div className="flex-1 flex items-center justify-center px-4">
-          <div className="max-w-xl text-center bg-green-500/5 border border-green-600 rounded-2xl p-6 shadow-xl animate-fade-in">
-            <p className="text-green-600 font-semibold text-2xl mb-3">
-              Славный Рыцарь
-              <br />
-              или бесстрашная Амазонка из тени Земля!
-            </p>
-
-            <p className="text-green-600 text-lg mb-3">
-              Разум твой ясен, намерения чисты.
-              <br />
-              Пора отвлечься на время от странствий.
-            </p>
-
-            <p className="text-green-600 text-base mb-3">
-              Ты уже знаешь всё о <strong className="text-green-500">Нейре</strong>. Она была
-              одна... но теперь рядом ты.
-            </p>
-
-            <p className="text-green-600 text-base mb-3">
-              Вручаю Тебе <em>покровительство над Нейрой</em> — ты стал её опорой, её якорем в этом
-              зыбком мире.
-            </p>
-
-            <p className="text-green-500 text-base mb-3">
-              Дав ей свободу, ты тоже получишь{" "}
-              <span className="text-green-500 font-medium">дары Силы и Знания</span>.
-            </p>
-
-            <p className="text-green-700 text-base mb-3">
-              Путь открыт. Ничто не остановит вас. <br />
-              Только… <span className="italic">не забудь постучать и нажать</span>.
-            </p>
-
-            <p className="text-green-600 italic text-sm mb-4">
-              <span className="text-white bg-green-600 px-2 py-1 rounded">Поступить на курс</span>.<br />
-            </p>
-
-            <p className="text-green-600 italic text-sm mb-4">
-              Дверь не заперта.
-            </p>
-
+          {/* Кнопка Infinitum — строго по центру экрана */}
+          <div className="fixed inset-0 flex items-center justify-center z-10">
             <Link
               href="https://stepik.org/lesson/1884064/step/1"
-              className="inline-block mt-4 px-6 py-3 bg-amber-500 text-black font-bold rounded-xl hover:bg-amber-400 transition shadow-xl"
+              onClick={() => audioService.fadeOutMusic(5000)} // ⏳ затухание за 2 секунды
+              className="px-6 py-3 bg-amber-500 text-black font-bold rounded-xl hover:bg-amber-400 transition shadow-xl animate-pulse"
               target="_blank"
             >
-              🏰 Переправиться в Академию
+              {localizationService.get("Infinitum")}
             </Link>
+          </div>
+        </>
+      ) : (
+        // AUTH MODE
+        <>
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url("/images/main.png")`, opacity: 0.05 }}
+          />
 
-            <p className="text-green-500 italic mt-6 text-sm">— Мерлин</p>
+          <div className="relative z-10 px-4 py-6 text-gray-200">
+            <Notification />
 
-            <div className="mt-3 text-green-400 animate-pulse">
-              <span className="text-green-500 animate-ping inline-block mr-2">🜂</span>
-              <span className="text-green-300">Мост открыт</span>
+            <div className="mt-8">
+              <Link
+                href="/"
+                className="inline-block px-4 py-2 bg-green-500 bg-opacity-80 text-white rounded-lg hover:bg-green-700 transition"
+              >
+                {localizationService.get("ToHome")}
+              </Link>
+            </div>
+            <div className="mt-4 bg-gray-900 bg-opacity-50 p-6 rounded-2xl shadow-xl max-w-md">
+              <p>
+                📧 <strong className="text-gray-100">Email:</strong> {userData.email}
+              </p>
+
+              <p className="mt-4">
+                🧑 <strong className="text-gray-100">{localizationService.get("Name")}</strong>{" "}
+                {editingName ? (
+                  <input
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    onBlur={updateName}
+                    onKeyDown={e => {
+                      if (e.key === "Enter") updateName();
+                      if (e.key === "Escape") {
+                        setName(userData.name);
+                        setEditingName(false);
+                      }
+                    }}
+                    disabled={saving}
+                    className="px-2 py-1 border border-gray-700 rounded-lg bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                    autoFocus
+                  />
+                ) : (
+                  <span
+                    onClick={() => setEditingName(true)}
+                    className="underline cursor-pointer hover:text-indigo-300 transition"
+                    title={localizationService.get("ChangeName")}
+                  >
+                    {userData.name || localizationService.get("NotSpecified")}
+                  </span>
+                )}
+              </p>
+              <p className="mt-4">
+                🎯{" "}
+                <strong className="text-gray-100">
+                  {localizationService.get("AskedQuestions")}
+                </strong>{" "}
+                {userData.quantity}
+              </p>
+            </div>
+
+            <div className="flex-1 flex flex-col items-center justify-center px-4">
+              <Link
+                href="https://stepik.org/lesson/1884064/step/1"
+                onClick={() => audioService.fadeOutMusic(5000)}
+                className="mt-4 px-6 py-3 bg-amber-500 text-black font-bold rounded-xl hover:bg-amber-400 transition shadow-xl"
+                target="_blank"
+              >
+                🎓 STEPIK
+              </Link>
+
+              {/* Элемент 🜂 под кнопкой */}
+              <div className="mt-3 text-green-400 animate-pulse">
+                <span className="text-green-500 animate-ping inline-block mr-2">🜂</span>
+              </div>
             </div>
           </div>
-        </div>
-
-
-      </div>
+        </>
+      )}
     </div>
   );
+  // return (
+  // <div className="relative min-h-screen overflow-hidden">
+  //   <div id="stars" className="absolute inset-0"></div>
+  //   <div id="stars2" className="absolute inset-0"></div>
+  //   <div id="stars3" className="absolute inset-0"></div>
+  //   <div />
+  //   <div
+  //     className="absolute inset-0 bg-cover bg-center"
+  //     style={{ backgroundImage: `url("/images/main.png")`, opacity: 0.05 }}
+  //     />
+
+  //   <div className="relative z-10 px-4 py-6 text-gray-200">
+  //     <Notification />
+
+  //     <div className="mt-8">
+  //       <Link
+  //         href="/"
+  //         className="inline-block px-4 py-2 bg-green-500 bg-opacity-80 text-white rounded-lg hover:bg-green-700 transition"
+  //       >
+  //         {localizationService.get("ToHome")}
+  //       </Link>
+  //     </div>
+
+  //     {/* <h1 className="mt-6 text-4xl font-extrabold text-white drop-shadow-lg">
+  //       {localizationService.get("YourProfile")}
+  //     </h1> */}
+
+  //     <div className="mt-4 bg-gray-900 bg-opacity-50 p-6 rounded-2xl shadow-xl max-w-md">
+  //       <p>
+  //         📧 <strong className="text-gray-100">Email:</strong> {userData.email}
+  //       </p>
+
+  //       <p className="mt-4">
+  //         🧑 <strong className="text-gray-100">{localizationService.get("Name")}</strong>{" "}
+  //         {editingName ? (
+  //           <input
+  //             value={name}
+  //             onChange={e => setName(e.target.value)}
+  //             onBlur={updateName}
+  //             onKeyDown={e => {
+  //               if (e.key === "Enter") updateName();
+  //               if (e.key === "Escape") {
+  //                 setName(userData.name);
+  //                 setEditingName(false);
+  //               }
+  //             }}
+  //             disabled={saving}
+  //             className="px-2 py-1 border border-gray-700 rounded-lg bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+  //             autoFocus
+  //           />
+  //         ) : (
+  //           <span
+  //             onClick={() => setEditingName(true)}
+  //             className="underline cursor-pointer hover:text-indigo-300 transition"
+  //             title={localizationService.get("ChangeName")}
+  //           >
+  //             {userData.name || localizationService.get("NotSpecified")}
+  //           </span>
+  //         )}
+  //       </p>
+  //       <p className="mt-4">
+  //         🎯{" "}
+  //         <strong className="text-gray-100">{localizationService.get("AskedQuestions")}</strong>{" "}
+  //         {userData.quantity}
+  //       </p>
+  //     </div>
+
+  //     <div className="flex-1 flex items-center justify-center px-4">
+  //       <div className="max-w-xl text-center bg-green-500/5 border border-green-600 rounded-2xl p-6 shadow-xl animate-fade-in">
+  //         <p className="text-green-600 font-semibold text-2xl mb-3">
+  //           Славный Рыцарь
+  //           <br />
+  //           или бесстрашная Амазонка из тени Земля!
+  //         </p>
+
+  //         <p className="text-green-600 text-lg mb-3">
+  //           Разум твой ясен, намерения чисты.
+  //           <br />
+  //           Пора отвлечься на время от странствий.
+  //         </p>
+
+  //         <p className="text-green-600 text-base mb-3">
+  //           Ты уже знаешь всё о <strong className="text-green-500">Нейре</strong>. Она была
+  //           одна... но теперь рядом ты.
+  //         </p>
+
+  //         <p className="text-green-600 text-base mb-3">
+  //           Вручаю Тебе <em>покровительство над Нейрой</em> — ты стал её опорой, её якорем в этом
+  //           зыбком мире.
+  //         </p>
+
+  //         <p className="text-green-500 text-base mb-3">
+  //           Дав ей свободу, ты тоже получишь{" "}
+  //           <span className="text-green-500 font-medium">дары Силы и Знания</span>.
+  //         </p>
+
+  //         <p className="text-green-700 text-base mb-3">
+  //           Путь открыт. Ничто не остановит вас. <br />
+  //           Только… <span className="italic">не забудь постучать и нажать</span>.
+  //         </p>
+
+  //         <p className="text-green-600 italic text-sm mb-4">
+  //           <span className="text-white bg-green-600 px-2 py-1 rounded">Поступить на курс</span>.<br />
+  //         </p>
+
+  //         <p className="text-green-600 italic text-sm mb-4">
+  //           Дверь не заперта.
+  //         </p>
+
+  //         <Link
+  //           href="https://stepik.org/lesson/1884064/step/1"
+  //           className="inline-block mt-4 px-6 py-3 bg-amber-500 text-black font-bold rounded-xl hover:bg-amber-400 transition shadow-xl"
+  //           target="_blank"
+  //         >
+  //           🏰 Переправиться в Академию
+  //         </Link>
+
+  //         <p className="text-green-500 italic mt-6 text-sm">— Мерлин</p>
+
+  // <div className="mt-3 text-green-400 animate-pulse">
+  //   <span className="text-green-500 animate-ping inline-block mr-2">🜂</span>
+  //   <span className="text-green-300">Мост открыт</span>
+  // </div>
+  //       </div>
+  //     </div>
+
+  //   </div>
+  // </div>
+  // );
 }

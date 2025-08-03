@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import CategoryForm from "./CategoryForm";
 import { localizationService } from "@/services/localizationService";
 import InfoMessages from "./InfoMessages";
+import store from "@/store/store";
 
 interface CategoriesViewProps {
   categories?: Array<{ id: string; name: string }>;
@@ -27,6 +28,7 @@ export default function CategoriesView({
   onRetry,
 }: CategoriesViewProps) {
   const [expandedInfo, setExpandedInfo] = useState(false);
+  const currentMode = store.getState().mode.current;
 
   if (isLoading) {
     return <div className="p-4">{localizationService.get("LoadingCategories")}</div>;
@@ -101,8 +103,7 @@ export default function CategoriesView({
                       animate={{ opacity: 1, height: "auto" }}
                       exit={{ opacity: 0, height: 0 }}
                     >
-                      <InfoMessages type="neira" />
-                      {/* <InfoMessages type="auth" /> */}
+                      <InfoMessages type={currentMode} />
                     </motion.div>
                   )}
                 </AnimatePresence>

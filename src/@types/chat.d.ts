@@ -92,3 +92,5 @@ interface UserData {
   provider: string;
   quantity: number;
 }
+
+type Mode = "auth" | "neira" | "demo";

@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import { showNotification } from "@/reducers/notificationReducer";
 import { AppDispatch } from "@/store/store";
 import { localizationService } from "@/services/localizationService";
+import { modeActions } from "@/reducers/modeReducer";
 
 const baseURL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -58,6 +59,13 @@ const BaseForm: React.FC<BaseFormProps> = ({ type, onClose }) => {
           password,
           redirect: false,
         });
+        if (!result?.error) {
+          const name = email.split("@")[0].toLowerCase();
+          const newMode = name === "neira" ? "neira" : "auth";
+          dispatch(modeActions.setMode(newMode)); // <-- добавляем это
+          onClose();
+        }
+        
         if (result?.error) {
           setError(localizationService.get("invalidCredentials"));
           return;

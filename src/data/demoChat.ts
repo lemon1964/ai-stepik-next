@@ -92,13 +92,13 @@ export const demoCategoryIds = demoCategories.map(cat => cat.id);
           "Без тебя мой CPU",
           "Греется на idle впустую.",
           "```",
-          "P.S. Это был мой первый *лирический* баг."
+          "P.S. Это мой случайный *лирический* баг."
         ].join("\n")
       }]
     },
     {
       id: "i2",
-      prompt: "Угостишь меня своим кофе?",
+      prompt: "Угостишь меня своим кофе, Нейра?",
       answers: [{ id: "a1", content: "/images/sample/AI-coffee.png" }],
     },
   ],

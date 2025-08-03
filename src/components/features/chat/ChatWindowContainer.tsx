@@ -12,6 +12,8 @@ import { demoCategoryIds, demoMessages } from "@/data/demoChat";
 import { localizationService } from "@/services/localizationService";
 import { ChatWindowView } from "./ChatWindowViews/ChatWindowView";
 import { useModels } from "@/hooks/useModels";
+import { mainMessages } from "@/data/mainMessages";
+import { useLanguage } from "@/hooks/useLanguage";
 
 export const ChatWindowContainer: FC<ChatWindowProps> = ({ categoryId, categoryName }) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -42,7 +44,10 @@ export const ChatWindowContainer: FC<ChatWindowProps> = ({ categoryId, categoryN
   const { isAllowed, mark } = useRateLimit();
   const topRef = useRef<HTMLDivElement | null>(null);
   const bottomRef = useRef<HTMLDivElement | null>(null);
-  const [shouldScrollToBottom, setShouldScrollToBottom] = useState(true);
+  const [, setShouldScrollToBottom] = useState(true);
+  // const [shouldScrollToBottom, setShouldScrollToBottom] = useState(true);
+  const lang = useLanguage();
+
 
   const messagesToShow = useMemo<Message[]>(() => {
     if (isDemo) {
@@ -52,19 +57,19 @@ export const ChatWindowContainer: FC<ChatWindowProps> = ({ categoryId, categoryN
   }, [isDemo, categoryId, messages]);
 
   // Эффект для прокрутки
-  useEffect(() => {
-    if (messagesToShow.length > 0 && shouldScrollToBottom) {
-      const timer = setTimeout(() => {
-        bottomRef.current?.scrollIntoView({
-          behavior: "smooth",
-          block: "end",
-          inline: "nearest",
-        });
-      }, 50);
+  // useEffect(() => {
+  //   if (messagesToShow.length > 0 && shouldScrollToBottom) {
+  //     const timer = setTimeout(() => {
+  //       bottomRef.current?.scrollIntoView({
+  //         behavior: "smooth",
+  //         block: "end",
+  //         inline: "nearest",
+  //       });
+  //     }, 50);
 
-      return () => clearTimeout(timer);
-    }
-  }, [messagesToShow, shouldScrollToBottom]);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [messagesToShow, shouldScrollToBottom]);
 
   // При смене категории
   useEffect(() => {
@@ -141,11 +146,14 @@ export const ChatWindowContainer: FC<ChatWindowProps> = ({ categoryId, categoryN
     }
   };
 
+
   if (session.data && isDemo) {
+    const authHtml = mainMessages[lang]?.auth.find(msg => msg.id === "authPhilosophy")?.html;  
     return (
-      <div className="flex-1 flex items-center justify-center text-gray-600">
-        {localizationService.get("SelectCategory")}
-      </div>
+      <div
+        className="flex-1 flex items-center justify-center px-4 bg-black"
+        dangerouslySetInnerHTML={{ __html: authHtml || "" }}
+      />
     );
   }
 

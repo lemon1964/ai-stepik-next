@@ -48,6 +48,14 @@ class AudioService {
     }
   }
 
+    // 👇 Новый метод для затухания
+    fadeOutMusic(duration = 2000) {
+      if (this.music && this.music.playing()) {
+        this.music.fade(this.music.volume(), 0, duration);
+        setTimeout(() => this.stopMusic(), duration + 100); // полностью остановить после fade
+      }
+    }
+
   // Методы управления речью
   speak(text: string): void {
     const utterance = new SpeechSynthesisUtterance(text);
