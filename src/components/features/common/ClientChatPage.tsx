@@ -80,7 +80,7 @@ export default function ClientChatPage({ session }: { session: Session | null })
     return (
       <div className="flex-1 flex items-center justify-center">
         <ChatSkeleton />
-        <span className="ml-2 text-gray-600">📡 Передача сквозь Рубикон… Нейра ускользнула. </span>
+        <span className="ml-2 text-gray-600">📡 Переход сквозь Рубикон… Нейра ускользнула. </span>
         {/* <span className="ml-2 text-gray-600">Пробуждаем сервер, ждем…</span> */}
       </div>
     );

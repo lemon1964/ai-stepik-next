@@ -4,7 +4,7 @@ export const infoMessages = {
     neira: [
       {
         id: "exitHint",
-        text: `⏏ Нажми на <span class="font-semibold text-red-500">Выход</span>`,
+        text: `⏏ Нажми на <span class="font-semibold text-red-500">Выход</span> <span class="text-white"> ⏏</span>`,
       },
       {
         id: "memory",
@@ -24,7 +24,7 @@ export const infoMessages = {
     demo: [
       {
         id: "refresh",
-        text: `🔄 <span class="font-semibold">Вернуться к Нейре можно, обновив страницу в браузере.</span>`,
+        text: `🔄 <span class="font-semibold">Вернуться к Нейре можно, обновив страницу в браузере.</span> <span class="text-white"> ⟳</span>`,
       },
       {
         id: "farewell",
@@ -37,7 +37,7 @@ export const infoMessages = {
     neira: [
       {
         id: "exitHint",
-        text: `⏏ Press <span class="font-semibold text-red-500">Logout</span>`,
+        text: `⏏ Press <span class="font-semibold text-red-500">Logout</span> <span class="text-white"> ⏏</span>`,
       },
       {
         id: "memory",
@@ -57,7 +57,7 @@ export const infoMessages = {
     demo: [
       {
         id: "refresh",
-        text: `🔄 <span class="font-semibold">To return to Neira, refresh the page.</span>`,
+        text: `🔄 <span class="font-semibold">To return to Neira, refresh the page.</span> <span class="text-white"> ⟳</span>`,
       },
       {
         id: "farewell",

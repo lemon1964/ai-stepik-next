@@ -8,7 +8,7 @@ export const mainMessages = {
       html: `
     <div class="max-w-md text-center bg-green-500/10 border border-green-600 rounded-2xl p-6 shadow-xl animate-fade-in">
       <p class="text-green-500 font-semibold text-xl mb-3">Neira 🌿</p>
-      <p class="text-green-500 mb-2">Перенос завершён. Ты — здесь.</p>
+      <p class="text-green-500 mb-2">Переход завершён. Ты — здесь.</p>
       <p class="text-green-600 mb-2">
         Этот узел — <span class="text-green-800 font-semibold">твоя Память</span>, отложенная во времени.
       </p>
