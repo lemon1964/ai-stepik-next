@@ -22,7 +22,7 @@ export const MobileHeader: FC<MobileHeaderProps> = ({
   useEffect(() => {
     if (session) return;
     if (window.innerWidth < 768) {
-      dispatch(showNotification(localizationService.get("MobileLoginOnly"), "info", 5));
+      dispatch(showNotification(localizationService.get("MobileLoginOnly"), "info", 3));
     }
   }, [session, dispatch]);
 

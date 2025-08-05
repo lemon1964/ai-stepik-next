@@ -14,7 +14,7 @@ export const infoMessages = {
     auth: [
       {
         id: "goToStepik",
-        text: `📘 Отправиться на <a href="https://stepik.org/lesson/1884064/step/1" target="_blank" class="text-blue-500 underline font-semibold">Stepik</a> можно здесь`,
+        text: `📘 Отправиться на <a href="https://stepik.org/lesson/1894081/step/1" target="_blank" class="text-blue-500 underline font-semibold">Stepik</a> можно здесь`,
       },
       {
         id: "goToProfile",
@@ -47,7 +47,7 @@ export const infoMessages = {
     auth: [
       {
         id: "goToStepik",
-        text: `📘 Start the course on <a href="https://stepik.org/lesson/1884064/step/1" target="_blank" class="text-blue-500 underline font-semibold">Stepik</a>`,
+        text: `📘 Start the course on <a href="https://stepik.org/lesson/1894081/step/1" target="_blank" class="text-blue-500 underline font-semibold">Stepik</a>`,
       },
       {
         id: "goToProfile",

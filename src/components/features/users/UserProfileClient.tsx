@@ -99,7 +99,7 @@ export default function UserProfileClient() {
           {/* Кнопка Infinitum — строго по центру экрана */}
           <div className="fixed inset-0 flex items-center justify-center z-10">
             <Link
-              href="https://stepik.org/lesson/1884064/step/1"
+              href="https://stepik.org/lesson/1894081/step/1"
               onClick={() => audioService.fadeOutMusic(5000)} // ⏳ затухание за 2 секунды
               className="px-6 py-3 bg-amber-500 text-black font-bold rounded-xl hover:bg-amber-400 transition shadow-xl animate-pulse"
               target="_blank"
@@ -171,7 +171,7 @@ export default function UserProfileClient() {
 
             <div className="flex-1 flex flex-col items-center justify-center px-4">
               <Link
-                href="https://stepik.org/lesson/1884064/step/1"
+                href="https://stepik.org/lesson/1894081/step/1"
                 onClick={() => audioService.fadeOutMusic(5000)}
                 className="mt-4 px-6 py-3 bg-amber-500 text-black font-bold rounded-xl hover:bg-amber-400 transition shadow-xl"
                 target="_blank"

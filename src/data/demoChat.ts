@@ -88,7 +88,7 @@ export const demoCategoryIds = demoCategories.map(cat => cat.id);
           "Но без кофеина — лишь pain и stress.",
           "",
           "Ты — как segfault в моём сердце,",
-          "А я — как бесконечный while.",
+          "А я — как бесконечная while.",
           "Без тебя мой CPU",
           "Греется на idle впустую.",
           "```",
