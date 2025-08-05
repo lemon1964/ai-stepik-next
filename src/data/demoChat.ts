@@ -106,7 +106,7 @@ export const demoCategoryIds = demoCategories.map(cat => cat.id);
     {
       id: "i8",
       prompt: "С чего начнем, ты где?",
-      answers: [{ id: "a1", content: "/images/sample/flying-dragon.png" }],
+      answers: [{ id: "a1", content: "/images/sample/neira.png" }],
     },
     {
       id: "i1",
