@@ -47,7 +47,7 @@ export const DesktopHeader: FC<DesktopHeaderProps> = ({ modelType, selectedModel
 
   if (isLoading || status === "loading") {
     return (
-      <header className="hidden md:flex items-center justify-between p-4 bg-gray-800 text-white">
+      <header className="hidden md:flex items-center justify-between p-4 bg-black text-white">
         <div className="animate-pulse">Загрузка...</div>
       </header>
     );

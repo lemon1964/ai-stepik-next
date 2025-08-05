@@ -13,7 +13,7 @@ const isTokenExpired = (token: string) => {
 
   const parts = token.split(".");
   if (parts.length !== 3) {
-    console.error("Invalid token format");
+    console.log("Invalid token format");
     return true;
   }
 
@@ -21,16 +21,18 @@ const isTokenExpired = (token: string) => {
     const payload = JSON.parse(atob(parts[1]));
     return !payload.exp || payload.exp * 1000 < Date.now();
   } catch (error) {
-    console.error("Error decoding token payload", error);
+    console.log("Error decoding token payload", error);
     return true;
   }
 };
 
 let isSigningOut = false;
 
+// Обработчик выхода из сессии
 const handleSignOut = () => {
   if (!isSigningOut) {
     isSigningOut = true;
+    // уведомление об истечении сессии
     store.dispatch(showNotification(localizationService.get("SessionExpired"), "info", 5));
     localStorage.removeItem("auto-guest-login");
     signOut();
@@ -38,25 +40,32 @@ const handleSignOut = () => {
   }
 };
 
+// Создание экземпляра axios
 const apiClient = axios.create({
   baseURL: baseURL,
   headers: { "Content-Type": "application/json" },
 });
 
-apiClient.interceptors.request.use(async (config) => {
+// Перехватчик запросов
+apiClient.interceptors.request.use(async config => {
   const session = await getSession();
 
   if (session?.accessToken && isTokenExpired(session.accessToken)) {
     try {
       const { data } = await axios.post(
         `${baseURL}/api/auth/refresh/`,
-        { refresh: session.refreshToken }
+        { refresh: session.refreshToken },
+        { headers: { "Content-Type": "application/json" } }
       );
-      session.accessToken = data.access;
-      session.refreshToken = data.refresh;
+
+      session.accessToken = data.accessToken;
+      session.refreshToken = data.refreshToken;
+
+      // console.log("🔐 AccessToken:", data.accessToken);
+      // console.log("🔐 RefreshToken:", data.refreshToken);
     } catch {
       handleSignOut();
-      throw new axios.Cancel("Session expired");
+      throw new axios.Cancel(localizationService.get("RequestBlocked"));
     }
   }
 
@@ -67,30 +76,35 @@ apiClient.interceptors.request.use(async (config) => {
   return config;
 });
 
+// Перехватчик ответов
 apiClient.interceptors.response.use(
-  (response) => response,
-  async (error) => {
+  response => response,
+  async error => {
     const originalRequest = error.config;
 
+    // если ошибка сети (сервер не отвечает)
     if (error.code === "ERR_NETWORK") {
-      store.dispatch(
-        showNotification(localizationService.get("ServerOfflineBanner"), "error", 6)
-      );
+      store.dispatch(showNotification(localizationService.get("ServerOfflineBanner"), "error", 6));
     }
 
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
+
       const session = await getSession();
 
       if (session?.refreshToken) {
         try {
           const { data } = await axios.post(
             `${baseURL}/api/auth/refresh/`,
-            { refresh: session.refreshToken }
+            { refresh: session.refreshToken },
+            { headers: { "Content-Type": "application/json" } }
           );
-          session.accessToken = data.access;
-          session.refreshToken = data.refresh;
-          originalRequest.headers["Authorization"] = `Bearer ${data.access}`;
+
+          session.accessToken = data.accessToken;
+          session.refreshToken = data.refreshToken;
+          console.log("🔐🔐 AccessToken:", data.accessToken);
+
+          originalRequest.headers["Authorization"] = `Bearer ${data.accessToken}`;
           return apiClient(originalRequest);
         } catch {
           handleSignOut();

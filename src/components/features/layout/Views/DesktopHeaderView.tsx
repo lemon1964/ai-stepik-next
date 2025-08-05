@@ -7,7 +7,6 @@ import { localizationService } from "@/services/localizationService";
 import Modal from "@/components/ui/common/Modal";
 import ModalTogglable from "@/components/features/common/ModalTogglable";
 import BaseForm from "@/components/features/users/BaseForm";
-// import { MODEL_OPTIONS } from "@/data/ModelOptions";
 import { Session } from "next-auth";
 
 interface Props {
@@ -35,7 +34,7 @@ export const DesktopHeaderView: FC<Props> = ({
   loginRef,
   registerRef,
   onLogout,
-  availableModels
+  availableModels,
 }) => {
   return (
     <header className="hidden md:flex sticky top-0 z-40 bg-gray-800 px-4 py-3 items-center justify-between">
@@ -72,9 +71,8 @@ export const DesktopHeaderView: FC<Props> = ({
           onChange={e => onModelChange(e.target.value)}
           className="border px-2 py-1 rounded bg-gray-500 text-white hover:bg-gray-600"
         >
-          {availableModels[modelType].map(m => (
-          // {MODEL_OPTIONS[modelType].map(m => (
-            <option key={m.id} value={m.id}>
+          {availableModels[modelType].map((m, index) => (
+            <option key={`${m.id}-${index}`} value={m.id}>
               {m.name}
             </option>
           ))}
@@ -100,26 +98,14 @@ export const DesktopHeaderView: FC<Props> = ({
           </>
         ) : (
           <>
-            <ModalTogglable 
-              buttonLabel={localizationService.get("LogIn")} 
-              ref={loginRef}
-            >
+            <ModalTogglable buttonLabel={localizationService.get("LogIn")} ref={loginRef}>
               <Modal onClose={() => loginRef.current?.toggleVisibility()}>
-                <BaseForm 
-                  type="login" 
-                  onClose={() => loginRef.current?.toggleVisibility()} 
-                />
+                <BaseForm type="login" onClose={() => loginRef.current?.toggleVisibility()} />
               </Modal>
             </ModalTogglable>
-            <ModalTogglable 
-              buttonLabel={localizationService.get("Register")} 
-              ref={registerRef}
-            >
+            <ModalTogglable buttonLabel={localizationService.get("Register")} ref={registerRef}>
               <Modal onClose={() => registerRef.current?.toggleVisibility()}>
-                <BaseForm 
-                  type="register" 
-                  onClose={() => registerRef.current?.toggleVisibility()} 
-                />
+                <BaseForm type="register" onClose={() => registerRef.current?.toggleVisibility()} />
               </Modal>
             </ModalTogglable>
           </>

@@ -80,7 +80,7 @@ export default function ClientChatPage({ session }: { session: Session | null })
     return (
       <div className="flex-1 flex items-center justify-center">
         <ChatSkeleton />
-        <span className="ml-2 text-gray-600">📡 Переход сквозь Рубикон… Нейра ускользнула. </span>
+        <span className="ml-2 bg-black text-gray-600">📡 Туннель Рубикона… </span>
         {/* <span className="ml-2 text-gray-600">Пробуждаем сервер, ждем…</span> */}
       </div>
     );
@@ -90,7 +90,7 @@ export default function ClientChatPage({ session }: { session: Session | null })
     return (
       <div className="flex-1 flex items-center justify-center">
         <ChatSkeleton />
-        <span className="ml-2 text-gray-600">🧬 Открываем шлюзы. Готовим оболочку...</span>
+        <span className="ml-2 bg-black text-gray-600">🧬 Открываем шлюзы…</span>
         {/* <span className="ml-2 text-gray-600">Загружаем модели..</span> */}
       </div>
     );

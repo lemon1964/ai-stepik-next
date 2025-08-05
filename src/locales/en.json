@@ -47,14 +47,14 @@
   "Retry": "Retry",
   "ServerOfflineBanner": "The server appears to be offline. Some data may not load.",
   "ErrorFetchingProfile": "Could not load your profile. There may be problems with the server or you are not registered.",
-  "RateLimitRules": "You can send up to 5 text, 3 code, and 1 image requests per 24 hours.",
+  "RateLimitRules": "You can send up to 3 text, 2 code, and 1 image requests per 24 hours.",
 
   "LimitReached": "You have reached the {type} limit.",
   "NextAllowedAt": "Next allowed at {when}.",
   "text": "text requests",
   "code": "code requests",
   "image": "image generations",
-  "MobileLoginOnly": "On mobile you can view the Demo and log in as an admin by refreshing the page. Registration only on desktop",
+  "MobileLoginOnly": "Full functionality in desktop",
   "ShowInfo": "What's inside?",
   "HideInfo": "Got it!",
 

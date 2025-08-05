@@ -32,8 +32,6 @@ export const Layout: FC<LayoutProps> = ({ children, onCategorySelect }) => {
     <div className="flex flex-col h-screen">
       <MobileHeader
         onMenuToggle={() => setMenuOpen(o => !o)}
-        // modelType={modelType}
-        // selectedModel={selectedModel}
       />
       <DesktopHeader modelType={modelType} selectedModel={selectedModel} />
       <div className="flex flex-1 overflow-hidden min-h-0">

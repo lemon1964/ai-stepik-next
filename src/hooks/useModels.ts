@@ -1,4 +1,4 @@
-// ai-chat-front/src/hooks/useModels.ts
+// ai-chat-next/src/hooks/useModels.ts
 import { useGetModelsQuery } from "@/services/chatApi";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
