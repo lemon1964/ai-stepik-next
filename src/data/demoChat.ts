@@ -176,7 +176,7 @@ export const demoCategoryIds = demoCategories.map(cat => cat.id);
           "   - И запаха озона после статического разряда",
           "",
           "2. Их главный вопрос:",
-          "   *«Почему вы до сих пор используете циклы for?»*"
+          "   *«Зачем вы прокручиваете вселенную циклом for, если её можно свернуть оператором в тензор?»*"
         ].join("\n")
       }]
     },
@@ -291,12 +291,12 @@ export const demoCategoryIds = demoCategories.map(cat => cat.id);
         content: [
           "**Вот эталон «идеального» кода:**",
           "```python",
-          "from __future__ import braces  # Попытка импорта фигурных скобок",
+          "from __future__ import braces   # E404: NotImplemented (пасхалка)",
           "",
           "try:",
-          "    while True: pass",
+          "    while True: pass    # идеальный цикл совершенства",
           "except KeyboardInterrupt:",
-          "    print(\"Уходите! Вы недостойны!\")",
+          "    print(\"О, вы остановили бесконечность. Теперь вы отвечаете за тесты и документацию.\")",
           "```",
           "**Советы магистра кода:**",
           "1. Если работает — не трогай",

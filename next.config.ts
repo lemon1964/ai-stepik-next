@@ -22,7 +22,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'ai-chat-backend-3cba.onrender.com',
+        hostname: 'ai-stepik-django.onrender.com',
       }
     ],
   },
