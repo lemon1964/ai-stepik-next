@@ -45,7 +45,7 @@
   "LoadingProfile": "Loading profile...",
   "ErrorFetchingProfile": "Could not load your profile. There may be problems with the server or you are not registered.",
 
-  "RateLimitRules": "You can send up to 3 text, 2 code, and 1 image requests per 24 hours.",
+  "RateLimitRules": "You can send 1 request - text/code/image every 24 hours.",
   "LimitReached": "You have reached the {type} limit.",
   "NextAllowedAt": "Next allowed at {when}.",
   "text": "text requests",

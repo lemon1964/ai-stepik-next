@@ -4,8 +4,8 @@ import { useCallback } from "react";
 const STORAGE_KEY = "rate_limit";
 const PERIOD_MS = 24 * 3600_000; // 24 часа
 const LIMITS = {
-  text: 3,
-  code: 2,
+  text: 1,
+  code: 1,
   image: 1,
 } as const;
 
