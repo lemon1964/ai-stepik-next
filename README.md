@@ -1,38 +1,25 @@
-# AI Chat — frontend (Next.js + Tailwind + Redux Toolkit)
+# AI на Django и Next.js — Frontend (Original)
 
-Фронтенд-приложение AI-чата.
+Демо фронтенда финального проекта курса. На сайте — интерфейс AI-агрегатора и художественная история Нейры.
 
-## 🔗 Связан с бэкендом
+- **Live**: https://ai-stepik-next.onrender.com
+- **Backend**: https://ai-stepik-django.onrender.com
+- **Пролог**: https://lemon1964.github.io/ai-chat-ghpages/
 
-Репозиторий: [ai-chat-django](https://github.com/lemon1964/ai-stepik-django.git)  
-Продакшен: https://ai-stepik-next.onrender.com/
+## О проекте
+Это оригинальная прод-версия фронтенда. Полный исходный код, инструкции и пошаговая сборка доступны в курсах на Stepik:
+- Часть I (бесплатно): https://stepik.org/a/250212  
+- Часть II (продолжение): https://stepik.org/a/250427
 
-## ⚙️ Стэк
+> В этом репозитории **нет исходников**. Здесь только общая информация и ссылки на развёрнутые демо.
 
-- [Next.js](https://nextjs.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Redux Toolkit](https://redux-toolkit.js.org/)
-- [NextAuth.js](https://next-auth.js.org/)
-- TypeScript
+## Стек
+Next.js · React · TypeScript · Tailwind · RTK Query / Redux Toolkit · Markdown/Prism · Web Speech API/TTS
 
-## 🚀 Установка
+## Юзкейс
+- Личный AI-агрегатор (текст/код/изображения)
+- Голосовой ввод и озвучка
+- Связка с Django backend
 
-```bash
-git clone https://github.com/lemon1964/ai-stepik-next.git
-cd ai-chat-next
-cp .env.local.example .env.local
-npm install
-```
-
-## 🧪 Запуск в dev-режиме
-
-```bash
-npm run dev
-```
-
-Откройте [http://localhost:3000](http://localhost:3000)
-
-## 🌐 Продакшен
-
-Хостинг: [Render](https://render.com)
-URL: [https://ai-stepik-next.onrender.com/](https://ai-stepik-next.onrender.com/)
+## Правовой статус
+Проектный контент и ассеты демонстрационные. Исходные материалы, настройки и замены ассетов описаны внутри курсов.
