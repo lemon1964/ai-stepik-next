@@ -37,7 +37,7 @@ export function useUserSession() {
       try {
         const res = await apiClient.get("/api/auth/get-user-data/");
         setUserName(res.data.name || "🫥");
-        // dispatch(showNotification(localizationService.get("RateLimitRules"), "info", 5));
+        dispatch(showNotification(localizationService.get("RateLimitRules"), "info", 5));
       } catch {
         setUserName("🫥");
         dispatch(showNotification(localizationService.get("ErrorFetchingProfile"), "error", 4));

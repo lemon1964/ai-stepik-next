@@ -35,47 +35,65 @@ export default function ClientChatPage({ session }: { session: Session | null })
     localizationService.syncLanguageSettings();
   }, [currentLanguage]);
 
+  // 1) Сначала — самоочистка + reset UI
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      if (!session && localStorage.getItem("auto-guest-login") === "true") {
+        localStorage.removeItem("auto-guest-login");
+        // опционально чистим и «только что вышел» метку, если она зависла
+        const ts = sessionStorage.getItem("justSignedOutAt");
+        if (ts && Date.now() - parseInt(ts, 10) > 5000) {
+          sessionStorage.removeItem("justSignedOutAt");
+        }
+      }
+    }
+    setSelected(null);
+  }, [session]);
+
+  // 2) Ниже — эффект авто-входа
+  useEffect(() => {
+    if (isWakingUp) return; // ⬅️ ждём завершения wake-up цикла
+
     const alreadyAutoLoggedIn = localStorage.getItem("auto-guest-login");
     const justSignedOutAt = parseInt(sessionStorage.getItem("justSignedOutAt") || "0", 10);
     const recentlySignedOut = Date.now() - justSignedOutAt < 5000;
 
     if (!session && !alreadyAutoLoggedIn && !recentlySignedOut) {
-      signIn("credentials", {
-        email: "neira@infinitum.self",
-        // email: "usermhan@yandex.ru ",м
-        password: "E195375q",
-        redirect: false,
-      }).then(() => {
-        localStorage.setItem("auto-guest-login", "true");
-        dispatch(modeActions.setMode("neira"));
-      });
+      (async () => {
+        const res = await signIn("credentials", {
+          email: "neira@infinitum.self",
+          password: "E195375q",
+          redirect: false,
+        });
+        // ⬇️ Ставим флаг ТОЛЬКО при успехе
+        if (res?.ok) {
+          localStorage.setItem("auto-guest-login", "true");
+          dispatch(modeActions.setMode("neira"));
+        } else {
+          // флаг НЕ ставим — дадим шанс повторить позже
+          console.warn("Auto sign-in failed:", res?.error);
+        }
+      })();
     }
-  }, [session, dispatch]);
+  }, [session, dispatch, isWakingUp]);
 
   useEffect(() => {
     const userName = session?.user?.name?.toLowerCase();
     const currentMode = store.getState().mode.current;
-  
+
     if (!session) {
       if (currentMode !== "demo") {
         dispatch(modeActions.setMode("demo"));
       }
       return;
     }
-  
+
     if (userName === "neira" && currentMode !== "neira") {
       dispatch(modeActions.setMode("neira"));
     } else if (currentMode !== "auth") {
       dispatch(modeActions.setMode("auth"));
     }
   }, [session, dispatch]);
-  
-
-  // После других эффектов
-  useEffect(() => {
-    setSelected(null);
-  }, [session]);
 
   if (isWakingUp) {
     return (
@@ -103,10 +121,7 @@ export default function ClientChatPage({ session }: { session: Session | null })
       <Layout onCategorySelect={(id, name) => setSelected({ id, name })}>
         {selected ? (
           <ErrorBoundary>
-            <ChatWindowContainer
-              categoryId={selected.id}
-              categoryName={selected.name}
-            />
+            <ChatWindowContainer categoryId={selected.id} categoryName={selected.name} />
           </ErrorBoundary>
         ) : mainBlock ? (
           <div
