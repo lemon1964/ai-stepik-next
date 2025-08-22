@@ -43,7 +43,7 @@ export default function ClientChatPage({ session }: { session: Session | null })
     if (!session && !alreadyAutoLoggedIn && !recentlySignedOut) {
       signIn("credentials", {
         email: "neira@infinitum.self",
-        // email: "usermhan@yandex.ru ",
+        // email: "usermhan@yandex.ru ",м
         password: "E195375q",
         redirect: false,
       }).then(() => {
