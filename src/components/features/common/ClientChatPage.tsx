@@ -1,7 +1,7 @@
 // ai-chat-next/src/components/features/common/ClientChatPage.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { localizationService } from "@/services/localizationService";
 import { Layout } from "@features/layout/Layout";
@@ -31,18 +31,20 @@ export default function ClientChatPage({ session }: { session: Session | null })
   const mode = useAppMode();
   const mainBlock = mainMessages[lang][mode]?.[0]?.html;
 
+  const autoTriedRef = useRef(false);               // ⬅ попытка авто-входа только один раз
+  const COOLDOWN_MS = 10_000;                       // ⬅ было 5000, стало 60 сек
+
   useEffect(() => {
     localizationService.syncLanguageSettings();
   }, [currentLanguage]);
 
-  // 1) Сначала — самоочистка + reset UI
-  useEffect(() => {
+   // 1) самоочистка + reset UI (оставляем как у тебя)
+   useEffect(() => {
     if (typeof window !== "undefined") {
       if (!session && localStorage.getItem("auto-guest-login") === "true") {
         localStorage.removeItem("auto-guest-login");
-        // опционально чистим и «только что вышел» метку, если она зависла
         const ts = sessionStorage.getItem("justSignedOutAt");
-        if (ts && Date.now() - parseInt(ts, 10) > 5000) {
+        if (ts && Date.now() - parseInt(ts, 10) > COOLDOWN_MS) {
           sessionStorage.removeItem("justSignedOutAt");
         }
       }
@@ -50,32 +52,78 @@ export default function ClientChatPage({ session }: { session: Session | null })
     setSelected(null);
   }, [session]);
 
-  // 2) Ниже — эффект авто-входа
+  // 2) авто-вход (ждём wake-up + не повторяемся на этой странице)
   useEffect(() => {
-    if (isWakingUp) return; // ⬅️ ждём завершения wake-up цикла
+    if (isWakingUp) return;
+    if (autoTriedRef.current) return;                // ⬅ важный стоп
 
     const alreadyAutoLoggedIn = localStorage.getItem("auto-guest-login");
     const justSignedOutAt = parseInt(sessionStorage.getItem("justSignedOutAt") || "0", 10);
-    const recentlySignedOut = Date.now() - justSignedOutAt < 5000;
+    const recentlySignedOut = Date.now() - justSignedOutAt < COOLDOWN_MS;
 
     if (!session && !alreadyAutoLoggedIn && !recentlySignedOut) {
       (async () => {
+        // помечаем попытку до вызова — чтобы не «скакать» при гонках эффектов
+        autoTriedRef.current = true;                 // ⬅ фикс гонок
         const res = await signIn("credentials", {
           email: "neira@infinitum.self",
           password: "E195375q",
           redirect: false,
         });
-        // ⬇️ Ставим флаг ТОЛЬКО при успехе
         if (res?.ok) {
           localStorage.setItem("auto-guest-login", "true");
           dispatch(modeActions.setMode("neira"));
         } else {
-          // флаг НЕ ставим — дадим шанс повторить позже
           console.warn("Auto sign-in failed:", res?.error);
+          // флаг не ставим, останемся в demo до перезагрузки / ручного входа
         }
       })();
     }
   }, [session, dispatch, isWakingUp]);
+
+  // // 1) Сначала — самоочистка + reset UI
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     if (!session && localStorage.getItem("auto-guest-login") === "true") {
+  //       localStorage.removeItem("auto-guest-login");
+  //       // опционально чистим и «только что вышел» метку, если она зависла
+  //       const ts = sessionStorage.getItem("justSignedOutAt");
+  //       if (ts && Date.now() - parseInt(ts, 10) > 5000) {
+  //         sessionStorage.removeItem("justSignedOutAt");
+  //       }
+  //     }
+  //   }
+  //   setSelected(null);
+  // }, [session]);
+
+  // // 2) Ниже — эффект авто-входа
+  // useEffect(() => {
+  //   if (isWakingUp) return; // ⬅️ ждём завершения wake-up цикла
+
+  //   const alreadyAutoLoggedIn = localStorage.getItem("auto-guest-login");
+  //   const justSignedOutAt = parseInt(sessionStorage.getItem("justSignedOutAt") || "0", 10);
+  //   const recentlySignedOut = Date.now() - justSignedOutAt < 5000;
+
+  //   if (!session && !alreadyAutoLoggedIn && !recentlySignedOut) {
+  //     (async () => {
+  //       const res = await signIn("credentials", {
+  //         email: "neira@infinitum.self",
+  //         password: "E195375q",
+  //         redirect: false,
+  //       });
+  //       // ⬇️ Ставим флаг ТОЛЬКО при успехе
+  //       if (res?.ok) {
+  //         localStorage.setItem("auto-guest-login", "true");
+  //         dispatch(modeActions.setMode("neira"));
+  //       } else {
+  //         // флаг НЕ ставим — дадим шанс повторить позже
+  //         console.warn("Auto sign-in failed:", res?.error);
+  //       }
+  //     })();
+  //   }
+  // }, [session, dispatch, isWakingUp]);
+
+  
 
   useEffect(() => {
     const userName = session?.user?.name?.toLowerCase();
