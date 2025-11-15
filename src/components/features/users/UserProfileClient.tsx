@@ -172,6 +172,22 @@ export default function UserProfileClient() {
 
             <div className="flex-1 flex flex-col items-center justify-center px-4">
               <Link
+                href="https://t.me/lemon1964lab"
+                onClick={() => audioService.fadeOutMusic(5000)}
+                className="mt-4 px-6 py-3 bg-amber-500 text-black font-bold rounded-xl hover:bg-amber-400 transition shadow-xl"
+                target="_blank"
+              >
+                🎩 LemonLab
+              </Link>
+
+              {/* Элемент 🜂 под кнопкой */}
+              <div className="mt-3 text-green-400 animate-pulse">
+                <span className="text-green-500 animate-ping inline-block mr-2">🜂</span>
+              </div>
+            </div>
+
+            <div className="flex-1 flex flex-col items-center justify-center px-4">
+              <Link
                 href="https://stepik.org/a/250212"
                 onClick={() => audioService.fadeOutMusic(5000)}
                 className="mt-4 px-6 py-3 bg-amber-500 text-black font-bold rounded-xl hover:bg-amber-400 transition shadow-xl"
