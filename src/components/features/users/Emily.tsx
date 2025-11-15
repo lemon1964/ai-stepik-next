@@ -3,6 +3,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Unicorn from "@ui/common/Unicorn";
 
 export default function Emily() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -35,7 +36,8 @@ export default function Emily() {
     <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-white text-xl">🦄</div>
+          <Unicorn />
+          {/* <div className="text-white text-xl">🦄</div> */}
         </div>
       )}
       
@@ -63,6 +65,8 @@ export default function Emily() {
     </div>
   );
 }
+
+
 
 
 

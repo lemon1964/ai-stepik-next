@@ -101,7 +101,7 @@ export default function UserProfileClient() {
             <Link
               href="/emily"
               // href="https://stepik.org/a/253246/pay?promo=5b26f0129fa670d7"
-              onClick={() => audioService.fadeOutMusic(8000)} // ⏳ затухание за 2 секунды
+              onClick={() => audioService.fadeOutMusic(10000)} // ⏳ затухание за 10 секунд
               className="px-6 py-3 bg-amber-500 text-black font-bold rounded-xl hover:bg-amber-400 transition shadow-xl animate-pulse"
               target="_blank"
             >
